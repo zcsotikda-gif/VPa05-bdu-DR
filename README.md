@@ -74,6 +74,9 @@ cd <каталог проекта>
 в Linux-контейнере — там нет Tk, и это намеренно: если зависимость от `tkinter`
 просочится в ядро, тесты упадут.
 
+Нужен запущенный Docker Desktop. Отдельно собирать образ не требуется — первый
+же запуск соберёт `reminder-tests` сам:
+
 ```sh
 docker compose -f docker/compose.yaml run --rm tests
 ```
@@ -86,7 +89,22 @@ docker compose -f docker/compose.yaml run --rm tests
 docker compose -f docker/compose.yaml up --abort-on-container-exit tests
 ```
 
-Убрать за собой: `docker compose -f docker/compose.yaml down --rmi local`.
+Пересборка нужна не всегда: `src/` и `tests/` смонтированы в контейнер, поэтому
+правки кода видны сразу. Собирать заново надо после изменения `pyproject.toml`
+(например, появилась зависимость) или `docker/Dockerfile`:
+
+```sh
+docker compose -f docker/compose.yaml build
+```
+
+Убрать за собой — контейнер и образ одной командой:
+
+```sh
+docker compose -f docker/compose.yaml down --rmi local
+```
+
+После такой уборки следующий запуск соберёт образ заново, ничего настраивать
+не нужно.
 
 То же локально:
 
