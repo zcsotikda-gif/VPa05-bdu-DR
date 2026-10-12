@@ -78,6 +78,16 @@ cd <каталог проекта>
 docker compose -f docker/compose.yaml run --rm tests
 ```
 
+Флаг `--rm` удаляет контейнер после прогона, поэтому в Docker Desktop остаётся
+только образ `reminder-tests`. Чтобы контейнер `reminder-tests-1` остался в
+списке в состоянии `Exited`, запуск без удаления:
+
+```sh
+docker compose -f docker/compose.yaml up --abort-on-container-exit tests
+```
+
+Убрать за собой: `docker compose -f docker/compose.yaml down --rmi local`.
+
 То же локально:
 
 ```sh
